@@ -1,0 +1,13 @@
+<div class="grid grid-cols-3 gap-4 p-4 w-full bg-teal-700">
+  <ngsm-slot-item [items]="items" [currentIndex]="currentConfiguration[0]" [stopped]="stopped"></ngsm-slot-item>
+  <ngsm-slot-item [items]="items" [currentIndex]="currentConfiguration[1]" [stopped]="stopped"></ngsm-slot-item>
+  <ngsm-slot-item [items]="items" [currentIndex]="currentConfiguration[2]" [stopped]="stopped"></ngsm-slot-item>
+</div>
+
+<button class="mt-8 px-4 py-2 bg-teal-700 text-gray-100 hover:underline"
+        (click)="next()"
+>Start</button>
+
+<button class="mt-8 px-4 py-2 bg-teal-700 text-gray-100 hover:underline"
+        (click)="stop()"
+>Stop</button>

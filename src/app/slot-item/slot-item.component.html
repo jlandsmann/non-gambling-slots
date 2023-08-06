@@ -1,0 +1,9 @@
+<ng-container *ngIf="(indexToShow$ | async) !== null">
+  <div class="relative h-16 overflow-hidden">
+    <ng-container *ngFor="let item of items; let i = index">
+      <div class="absolute my-2 h-12 flex items-center"
+           [@slot]="calcOffsetClass(i, (indexToShow$ | async)!)"
+      >{{ item }} - {{ calcOffsetClass(i, (indexToShow$ | async)!) }}</div>
+    </ng-container>
+  </div>
+</ng-container>
