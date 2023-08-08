@@ -13,25 +13,22 @@ import {Subject} from "rxjs";
 export class SlotMachineComponent {
 
   readonly items: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  readonly start$ = new Subject<void>();
+  readonly stop$ = new Subject<void>();
 
-  currentConfiguration: [number, number, number] = [
-    this.generateRandomIndex(),
-    this.generateRandomIndex(),
-    this.generateRandomIndex(),
-  ];
-  stopped: boolean = false;
+  currentConfiguration: [number, number, number] = [1, 1, 1];
 
   next(): void {
-    this.stopped = false;
     this.currentConfiguration = [
       this.generateRandomIndex(),
       this.generateRandomIndex(),
       this.generateRandomIndex(),
     ];
+    this.start$.next();
   }
 
   stop(): void {
-    this.stopped = true;
+    this.stop$.next();
   }
 
   private generateRandomIndex(): number {

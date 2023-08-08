@@ -1,16 +1,16 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChange, SimpleChanges} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
     concatMap,
-    concatWith, delay, delayWhen, endWith, finalize,
+    concatWith, delay, delayWhen, EMPTY, endWith, filter, finalize,
     interval,
     map,
-    Observable,
+    Observable, of,
     ReplaySubject,
     shareReplay,
     startWith,
-    Subject,
-    switchMap, take,
+    Subject, Subscription,
+    switchMap, take, takeUntil,
     takeWhile, tap, timer
 } from "rxjs";
 import {animate, state, style, transition, trigger} from "@angular/animations";
@@ -26,7 +26,7 @@ const stepTime: number = 1000;
     animations: [
         trigger('slot', [
             state('hidden', style({
-                display: 'none'
+                opacity: 0
             })),
             state('previous', style({
                 transform: 'translateY(100%)'
@@ -38,11 +38,11 @@ const stepTime: number = 1000;
                 transform: 'translateY(-100%)'
             })),
             transition('hidden => next', [
-                style({transform: 'translateY(-200%)'}),
+                style({transform: 'translateY(-200%)', opacity: 1}),
                 animate(stepTime)
             ]),
             transition('previous => hidden', [
-                animate(stepTime, style({transform: 'translateY(200%)'})),
+                animate(stepTime, style({transform: 'translateY(200%)', opacity: 1})),
             ]),
             transition('* => *', [
                 animate(stepTime)
@@ -50,46 +50,55 @@ const stepTime: number = 1000;
         ])
     ]
 })
-export class SlotItemComponent {
+export class SlotItemComponent implements OnChanges {
+
     @Input({required: true})
     items: number[] = [];
 
-    private x = 0;
+    @Input({required: true})
+    targetIndex: number = 1;
 
     @Input({required: true})
-    set currentIndex(value: number) {
-        this.x = 0;
-        this.currentIndex$.next(value);
-    }
+    start$: Observable<void> = EMPTY;
 
     @Input({required: true})
-    stopped: boolean = true;
+    stop$: Observable<void> = EMPTY;
 
-    readonly indexToShow$: Observable<number>;
-    private readonly currentIndex$: Subject<number> = new ReplaySubject<number>(1);
+    indexToShow$: Observable<number>;
+    indexToShow: number = 0;
+    initialized: boolean = false;
+
+    private readonly doStart$ = new Subject<void>();
+    private startSubscription?: Subscription;
 
     constructor() {
-        this.indexToShow$ = this.currentIndex$.pipe(
-            switchMap((targetIndex) => interval(200).pipe(
-                takeWhile(() => !this.stopped),
-                startWith(0),
+        this.indexToShow$ = this.doStart$.pipe(
+            tap(() => this.initialized = true),
+            switchMap(() => interval(200).pipe(
+                takeUntil(this.stop$),
                 concatWith(
                     interval(100).pipe(
-                        startWith(0),
-                        take((2/3) * this.items.length),
-                        concatMap((x) => interval(400 + Math.pow(x, 1.2) * 50).pipe(
+                        concatMap((x) => interval(250 + Math.pow(x, 1.2) * 50).pipe(
                             take(2)
-                        ))
+                        )),
+                        takeWhile((v, i) =>
+                            i <= 2/3 * this.items.length || this.indexToShow !== this.targetIndex
+                        )
                     )
-                ),
-                tap(() => {
-                    if (this.stopped) this.x++;
-                }),
-                map((x, i) => this.items.length - (i % this.items.length) - 1),
-                takeWhile(idx => this.x <= (this.items.length / 2) || idx !== (this.items.length + targetIndex - 1) % this.items.length),
+                )
             )),
+            map((x, i) => this.items.length - (i % this.items.length) - 1),
+            startWith(0),
+            tap(idx => this.indexToShow = idx),
             shareReplay(1)
         );
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+      if ('start$' in changes) {
+        this.startSubscription?.unsubscribe();
+        this.startSubscription = this.start$.subscribe(() => this.doStart$.next());
+      }
     }
 
     calcOffsetClass(itemIdx: number, referenceIdx: number): string {

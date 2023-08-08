@@ -1,5 +1,5 @@
 <ng-container *ngIf="(indexToShow$ | async) !== null">
-  <div class="relative h-16 overflow-hidden">
+  <div class="relative h-16 overflow-hidden" [@.disabled]="!initialized">
     <ng-container *ngFor="let item of items; let i = index">
       <div class="absolute my-2 h-12 flex items-center"
            [@slot]="calcOffsetClass(i, (indexToShow$ | async)!)"
