@@ -2,6 +2,15 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {SlotItemComponent} from "../slot-item/slot-item.component";
 import {Subject} from "rxjs";
+import {
+  faAnchor,
+  faCoffee, faCrown,
+  faGamepad,
+  faHouse, faRecordVinyl, faRobot,
+  faRocket, faVirus,
+  faWandMagicSparkles,
+  IconDefinition
+} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'ngsm-slot-machine',
@@ -12,7 +21,10 @@ import {Subject} from "rxjs";
 })
 export class SlotMachineComponent {
 
-  readonly items: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  readonly items: IconDefinition[] = [
+    faCoffee, faHouse, faWandMagicSparkles, faRocket, faGamepad,
+    faAnchor, faRobot, faCrown, faRecordVinyl, faVirus,
+  ];
   readonly start$ = new Subject<void>();
   readonly stop$ = new Subject<void>();
 

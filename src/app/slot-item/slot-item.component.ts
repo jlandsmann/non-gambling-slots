@@ -1,26 +1,33 @@
-import {Component, Input, OnChanges, SimpleChange, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
-    concatMap,
-    concatWith, delay, delayWhen, EMPTY, endWith, filter, finalize,
-    interval,
-    map,
-    Observable, of,
-    ReplaySubject,
-    shareReplay,
-    startWith,
-    Subject, Subscription,
-    switchMap, take, takeUntil,
-    takeWhile, tap, timer
+  concatMap,
+  concatWith,
+  EMPTY,
+  interval,
+  map,
+  mergeWith,
+  Observable,
+  ReplaySubject,
+  shareReplay,
+  Subject,
+  Subscription,
+  switchMap,
+  take,
+  takeUntil,
+  takeWhile,
+  tap
 } from "rxjs";
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {IconDefinition} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 const stepTime: number = 1000;
 
 @Component({
     selector: 'ngsm-slot-item',
     standalone: true,
-    imports: [CommonModule],
+  imports: [CommonModule, FontAwesomeModule],
     templateUrl: './slot-item.component.html',
     styleUrls: ['./slot-item.component.scss'],
     animations: [
@@ -50,13 +57,16 @@ const stepTime: number = 1000;
         ])
     ]
 })
-export class SlotItemComponent implements OnChanges {
+export class SlotItemComponent implements OnInit, OnChanges {
 
     @Input({required: true})
-    items: number[] = [];
+    items: IconDefinition[] = [];
 
     @Input({required: true})
     targetIndex: number = 1;
+
+    @Input()
+    logging: boolean = false;
 
     @Input({required: true})
     start$: Observable<void> = EMPTY;
@@ -67,14 +77,16 @@ export class SlotItemComponent implements OnChanges {
     indexToShow$: Observable<number>;
     indexToShow: number = 0;
     initialized: boolean = false;
+    startIndex: number = 0;
 
     private readonly doStart$ = new Subject<void>();
+    private readonly startIndex$ = new ReplaySubject<number>(1);
     private startSubscription?: Subscription;
 
     constructor() {
         this.indexToShow$ = this.doStart$.pipe(
             tap(() => this.initialized = true),
-            switchMap(() => interval(200).pipe(
+            switchMap(() => interval(250).pipe(
                 takeUntil(this.stop$),
                 concatWith(
                     interval(100).pipe(
@@ -87,11 +99,17 @@ export class SlotItemComponent implements OnChanges {
                     )
                 )
             )),
-            map((x, i) => this.items.length - (i % this.items.length) - 1),
-            startWith(0),
+            map((x, i) => this.moduloItemCount(this.startIndex - i)),
+            mergeWith(this.startIndex$),
             tap(idx => this.indexToShow = idx),
             shareReplay(1)
         );
+    }
+
+    ngOnInit(): void {
+        this.startIndex = Math.floor(Math.random() * this.items.length);
+        this.startIndex$.next(this.startIndex);
+        this.startIndex$.complete();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -114,5 +132,12 @@ export class SlotItemComponent implements OnChanges {
             return 'next'
         }
         return 'hidden';
+    }
+
+    private moduloItemCount(x: number): number {
+      if (x < 0) {
+        x += (Math.abs(Math.ceil(x / this.items.length)) + 1) * this.items.length;
+      }
+      return x % this.items.length;
     }
 }

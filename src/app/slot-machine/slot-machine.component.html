@@ -1,15 +1,17 @@
-<div class="grid grid-cols-3 gap-4 p-4 w-full bg-teal-700">
-  <ngsm-slot-item [items]="items" [targetIndex]="currentConfiguration[0]" [start$]="start$" [stop$]="stop$"></ngsm-slot-item>
-  <ngsm-slot-item [items]="items" [targetIndex]="currentConfiguration[1]" [start$]="start$" [stop$]="stop$"></ngsm-slot-item>
-  <ngsm-slot-item [items]="items" [targetIndex]="currentConfiguration[2]" [start$]="start$" [stop$]="stop$"></ngsm-slot-item>
+<div class="w-full h-full flex flex-col items-center justify-center">
+  <div class="w-full h-2/3 flex justify-center">
+    <ngsm-slot-item class="block border w-1/4 h-full" [items]="items" [targetIndex]="currentConfiguration[0]" [start$]="start$" [stop$]="stop$"></ngsm-slot-item>
+    <ngsm-slot-item class="block border w-1/4 h-full" [items]="items" [targetIndex]="currentConfiguration[1]" [start$]="start$" [stop$]="stop$"></ngsm-slot-item>
+    <ngsm-slot-item class="block border w-1/4 h-full" [items]="items" [targetIndex]="currentConfiguration[2]" [start$]="start$" [stop$]="stop$"></ngsm-slot-item>
+  </div>
+
+  <div class="w-full flex justify-center gap-4">
+    <button class="mt-8 px-4 py-2 bg-teal-700 text-gray-100 hover:underline"
+            (click)="next()"
+    >Start</button>
+
+    <button class="mt-8 px-4 py-2 bg-red-600 text-gray-100 hover:underline"
+            (click)="stop()"
+    >Stop</button>
+  </div>
 </div>
-
-<p>{{ currentConfiguration }}</p>
-
-<button class="mt-8 px-4 py-2 bg-teal-700 text-gray-100 hover:underline"
-        (click)="next()"
->Start</button>
-
-<button class="mt-8 px-4 py-2 bg-teal-700 text-gray-100 hover:underline"
-        (click)="stop()"
->Stop</button>
