@@ -35,12 +35,15 @@ export class SelectionListComponent<T> {
   addItem(item?: T) {
     if (!item || this.selectedItems.includes(item)) return;
     this.selectedItems.push(item);
+    this.selectedItemsChange.emit(this.selectedItems);
   }
 
   removeItem(item?: T) {
     if (!item) return;
     const idx = this.selectedItems.indexOf(item);
-    if (idx >= 0) this.selectedItems.splice(idx, 1);
+    if (idx <= 0) return;
+    this.selectedItems.splice(idx, 1);
+    this.selectedItemsChange.emit(this.selectedItems);
   }
 
   addItemFromIndex(idx: number) {
