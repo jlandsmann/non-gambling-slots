@@ -8,9 +8,6 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
   selector: 'ngsm-root',
   standalone: true,
   imports: [CommonModule, RouterOutlet, FontAwesomeModule, SlotMachineComponent],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  template: '<router-outlet></router-outlet>'
 })
-export class AppComponent {
-  title = 'non-gambling-slots';
-}
+export class AppComponent { }

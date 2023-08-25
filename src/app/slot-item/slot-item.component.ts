@@ -94,7 +94,7 @@ export class SlotItemComponent implements OnInit, OnChanges {
                             take(2)
                         )),
                         takeWhile((v, i) =>
-                            i <= 2/3 * this.items.length || this.indexToShow !== this.targetIndex
+                            i <= 8 || this.indexToShow !== this.targetIndex
                         )
                     )
                 )

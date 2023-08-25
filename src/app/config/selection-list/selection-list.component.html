@@ -1,0 +1,19 @@
+<label class="grid grid-cols-2 gap-x-4">
+  <span class="block text-sm font-medium leading-6 text-gray-900">{{ availableItemsLabel }}</span>
+  <span class="block text-sm font-medium leading-6 text-gray-900">{{ selectedItemsLabel }}</span>
+  <select class="form-multiselect rounded block w-full mt-1" multiple (keydown)="addItemFromIndex(addSelect.selectedIndex)" #addSelect>
+    <ng-container *ngFor="let item of availableItems; trackBy: trackByFn">
+      <option *ngIf="!selectedItems.includes(item)"
+              [value]="item"
+              (dblclick)="addItem(item)"
+              #option
+      >{{ labelFn(item) }}</option>
+    </ng-container>
+  </select>
+  <select class="form-multiselect rounded block w-full mt-1" multiple (keydown)="removeItemFromIndex(removeSelect.selectedIndex)" #removeSelect>
+    <option *ngFor="let item of selectedItems; trackBy: trackByFn"
+            [value]="item"
+            (dblclick)="removeItem(item)"
+    >{{ labelFn(item) }}</option>
+  </select>
+</label>

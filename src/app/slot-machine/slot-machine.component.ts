@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {SlotItemComponent} from "../slot-item/slot-item.component";
 import {Subject} from "rxjs";
@@ -11,6 +11,7 @@ import {
   faWandMagicSparkles,
   IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
+import {ConfigService} from "../config/services";
 
 @Component({
   selector: 'ngsm-slot-machine',
@@ -21,23 +22,30 @@ import {
 })
 export class SlotMachineComponent {
 
-  readonly items: IconDefinition[] = [
-  ];
+  readonly name?: string;
+  readonly items: IconDefinition[];
+  readonly slots: number[];
   readonly start$ = new Subject<void>();
   readonly stop$ = new Subject<void>();
 
-  currentConfiguration: [number, number, number] = [1, 1, 1];
+  private readonly config = inject(ConfigService).getConfig();
+
+  currentConfiguration: number[];
+
+  constructor() {
+    this.name = this.config.name;
+    this.items = this.config.availableItems;
+    this.slots = new Array<number>(this.config.numberOfSlots).fill(0, 0, this.config.numberOfSlots);
+    this.currentConfiguration = this.slots.map(() => this.generateRandomIndex());
+  }
 
   next(): void {
-    this.currentConfiguration = [
-      this.generateRandomIndex(),
-      this.generateRandomIndex(),
-      this.generateRandomIndex(),
-    ];
+    this.currentConfiguration = this.slots.map(() => this.generateRandomIndex());
     this.start$.next();
   }
 
   stop(): void {
+    console.log(this.currentConfiguration, this.slots, this.items.map(i => i.iconName));
     this.stop$.next();
   }
 
