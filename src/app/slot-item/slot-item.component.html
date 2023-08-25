@@ -1,5 +1,5 @@
 <ng-container *ngIf="(indexToShow$ | async) !== null">
-  <div class="relative h-full overflow-hidden shadow-inner" [@.disabled]="!initialized">
+  <div class="relative h-full overflow-hidden" [@.disabled]="!initialized">
     <ng-container *ngFor="let item of items; let i = index">
       <div class="absolute top-1/4 h-1/2 flex items-center w-full justify-center"
            [@slot]="calcOffsetClass(i, (indexToShow$ | async)!)"
@@ -7,6 +7,7 @@
         <fa-icon size="5x" [icon]="item" class="text-teal-800"></fa-icon>
       </div>
     </ng-container>
-    <div class="absolute inset-0  bg-gradient-to-b from-gray-700 via-transparent to-gray-700"></div>
+    <div class="absolute top-0 left-0 right-0 h-1/4 bg-gradient-to-b from-neutral-800 to-transparent"></div>
+    <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-neutral-800 to-transparent"></div>
   </div>
 </ng-container>
