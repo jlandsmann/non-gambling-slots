@@ -22,8 +22,6 @@ import {
 export class SlotMachineComponent {
 
   readonly items: IconDefinition[] = [
-    faCoffee, faHouse, faWandMagicSparkles, faRocket, faGamepad,
-    faAnchor, faRobot, faCrown, faRecordVinyl, faVirus,
   ];
   readonly start$ = new Subject<void>();
   readonly stop$ = new Subject<void>();
