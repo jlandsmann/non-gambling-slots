@@ -14,5 +14,6 @@ export const DEFAULT_CONFIG: SlotMachineConfig = {
     faCoffee, faHouse, faWandMagicSparkles, faRocket, faGamepad,
     faAnchor, faRobot, faCrown, faRecordVinyl, faVirus,
   ],
-  numberOfSlots: 3
+  numberOfSlots: 3,
+  randomTargetConfiguration: true,
 };

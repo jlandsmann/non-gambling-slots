@@ -4,4 +4,6 @@ export interface SlotMachineConfig {
   name?: string;
   availableItems: IconDefinition[];
   numberOfSlots: number;
+  randomTargetConfiguration: boolean;
+  targetConfiguration?: IconDefinition[];
 }
