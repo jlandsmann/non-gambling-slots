@@ -45,7 +45,6 @@ export class SlotMachineComponent {
   }
 
   stop(): void {
-    console.log(this.currentConfiguration, this.slots, this.items.map(i => i.iconName));
     this.stop$.next();
   }
 

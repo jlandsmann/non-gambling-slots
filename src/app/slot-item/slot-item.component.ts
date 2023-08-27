@@ -90,9 +90,9 @@ export class SlotItemComponent implements OnInit, OnChanges {
                 takeUntil(this.stop$),
                 concatWith(
                     interval(100).pipe(
-                        concatMap((x) => interval(250 + Math.pow(x, 1.2) * 50).pipe(
-                            take(2)
-                        )),
+                        map((value, index) => 250 + (350 / (1 + Math.exp(-0.002 * 350 * index) * 400))),
+                        map(v => Math.round(v)),
+                        concatMap(value => interval(value).pipe(take(1))),
                         takeWhile((v, i) =>
                             i <= 8 || this.indexToShow !== this.targetIndex
                         )
