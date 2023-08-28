@@ -15,7 +15,11 @@ export class SelectionListComponent<T> {
   trackByFn: TrackByFunction<T> = (idx,v) => idx;
 
   @Input()
-  labelFn: (v: T) => string = JSON.stringify;
+  labelFn: (v: T) => string = (v) => {
+    if (typeof v === 'string') return v;
+    else if (typeof v === 'number') return v.toString();
+    else return JSON.stringify(v);
+  }
 
   @Input()
   availableItems: T[] = [];

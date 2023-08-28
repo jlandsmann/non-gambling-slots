@@ -1,9 +1,9 @@
-import type {IconDefinition} from "@fortawesome/free-solid-svg-icons";
+import {IconName} from "@fortawesome/fontawesome-common-types";
 
 export interface SlotMachineConfig {
   name?: string;
-  availableItems: IconDefinition[];
+  availableItems: IconName[];
   numberOfSlots: number;
   randomTargetConfiguration: boolean;
-  targetConfiguration?: IconDefinition[];
+  targetConfiguration?: IconName[];
 }

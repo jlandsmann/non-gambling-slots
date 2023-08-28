@@ -38,8 +38,6 @@
                            [availableItems]="items"
                            [selectedItems]="config.availableItems"
                            (selectedItemsChange)="updateConfig('availableItems', $event)"
-                           [trackByFn]="trackByIconName"
-                           [labelFn]="labelByIconName"
       ></ngsm-selection-list>
     </div>
   </section>
@@ -68,8 +66,12 @@
       <label class="block" *ngIf="config.targetConfiguration">
         <span class="block font-medium leading-6 text-gray-900 flex-grow">Which items should the slot machine roll to?</span>
         <div class="flex gap-2">
-          <select class="form-input rounded mt-1 block w-full" *ngFor="let slot of configurationTemplate; let i = index" [ngModel]="config.targetConfiguration[i]">
-            <option *ngFor="let item of items" [value]="item">{{ item.iconName }}</option>
+          <select class="form-input rounded mt-1 block w-full"
+                  *ngFor="let slot of config.targetConfiguration; let i = index; trackBy:trackByIndex"
+                  [ngModel]="config.targetConfiguration[i]"
+                  (ngModelChange)="updateTargetConfiguration(i, $event)"
+          >
+            <option *ngFor="let item of config.availableItems" [ngValue]="item">{{ item }}</option>
           </select>
         </div>
       </label>

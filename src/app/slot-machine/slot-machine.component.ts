@@ -7,11 +7,12 @@ import {
   faCoffee, faCrown,
   faGamepad,
   faHouse, faRecordVinyl, faRobot,
-  faRocket, faVirus,
+  faRocket, fas, faVirus,
   faWandMagicSparkles,
   IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 import {ConfigService} from "../config/services";
+import {IconName} from "@fortawesome/fontawesome-common-types";
 
 @Component({
   selector: 'ngsm-slot-machine',
@@ -23,29 +24,33 @@ import {ConfigService} from "../config/services";
 export class SlotMachineComponent {
 
   readonly name?: string;
-  readonly items: IconDefinition[];
+  readonly items: IconName[];
   readonly slots: number[];
   readonly start$ = new Subject<void>();
   readonly stop$ = new Subject<void>();
 
   private readonly config = inject(ConfigService).getConfig();
 
-  currentConfiguration: number[];
+  currentConfiguration: IconName[];
 
   constructor() {
     this.name = this.config.name;
     this.items = this.config.availableItems;
     this.slots = new Array<number>(this.config.numberOfSlots).fill(0, 0, this.config.numberOfSlots);
-    this.currentConfiguration = this.slots.map(() => this.generateRandomIndex());
+    this.currentConfiguration = this.generateRandomConfiguration();
   }
 
   next(): void {
-    this.currentConfiguration = this.slots.map(() => this.generateRandomIndex());
+    this.currentConfiguration = this.config.targetConfiguration ?? this.generateRandomConfiguration();
     this.start$.next();
   }
 
   stop(): void {
     this.stop$.next();
+  }
+
+  private generateRandomConfiguration(): IconName[] {
+    return this.slots.map(() => this.generateRandomIndex()).map(idx => this.items[idx]);
   }
 
   private generateRandomIndex(): number {

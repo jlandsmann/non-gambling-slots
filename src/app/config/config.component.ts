@@ -7,6 +7,7 @@ import {fas, IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {CdkListbox, CdkOption} from "@angular/cdk/listbox";
 import {SelectionListComponent} from "./selection-list/selection-list.component";
+import {IconName} from "@fortawesome/fontawesome-common-types";
 
 @Component({
   selector: 'ngsm-config',
@@ -17,12 +18,11 @@ import {SelectionListComponent} from "./selection-list/selection-list.component"
 })
 export class ConfigComponent {
 
-  readonly trackByIconName: TrackByFunction<IconDefinition> = (idx, item) => item.iconName;
-  readonly labelByIconName: (v: IconDefinition) => string = v => v.iconName;
-  readonly items: IconDefinition[] = Object.values(fas);
+  readonly items: IconName[] = Object.values(fas).map(i => i.iconName);
   readonly service: ConfigService = inject(ConfigService);
   config: SlotMachineConfig = this.service.getConfig();
-  configurationTemplate: IconDefinition[] = new Array(this.config.numberOfSlots).fill(this.items[0], 0, this.config.numberOfSlots);
+  configurationTemplate: IconName[] = this.generateConfiguration();
+  trackByIndex: TrackByFunction<IconName> = (icon, idx) => idx;
 
   updateNumberOfSlots(value: number): void {
     this.configurationTemplate = new Array(value).fill(this.items[0], 0, value);
@@ -30,12 +30,21 @@ export class ConfigComponent {
   }
 
   toggleTargetConfiguration(): void {
-    const targetConfiguration = this.config.targetConfiguration ? undefined : this.configurationTemplate;
-    this.updateConfig('targetConfiguration', targetConfiguration)
+    const targetConfiguration = this.config.targetConfiguration ? undefined : this.generateConfiguration();
+    this.updateConfig('targetConfiguration', targetConfiguration);
   }
 
   updateConfig<K extends keyof SlotMachineConfig>(key: K, value: SlotMachineConfig[K]): void {
     this.config[key] = value;
     this.service.updateConfig(key, value)
+  }
+
+  updateTargetConfiguration(i: number, $event: IconName) {
+    const targetConfig = this.config.targetConfiguration?.fill($event, i, i+1);
+    this.updateConfig('targetConfiguration', targetConfig);
+  }
+
+  private generateConfiguration(v?: IconName): IconName[] {
+    return new Array(this.config.numberOfSlots).fill(v ?? this.config.availableItems[0], 0, this.config.numberOfSlots);
   }
 }

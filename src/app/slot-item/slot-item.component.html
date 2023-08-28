@@ -4,7 +4,7 @@
       <div class="absolute top-1/4 h-1/2 flex items-center w-full justify-center"
            [@slot]="calcOffsetClass(i, (indexToShow$ | async)!)"
       >
-        <fa-icon size="5x" [icon]="item" class="text-teal-800"></fa-icon>
+        <fa-icon size="5x" [icon]="['fas', item]" class="text-teal-800"></fa-icon>
       </div>
     </ng-container>
     <div class="absolute top-0 left-0 right-0 h-1/4 bg-gradient-to-b from-neutral-800 to-transparent"></div>

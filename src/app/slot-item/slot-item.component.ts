@@ -21,6 +21,7 @@ import {
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {IconName} from "@fortawesome/fontawesome-common-types";
 
 const stepTime: number = 1000;
 
@@ -60,10 +61,10 @@ const stepTime: number = 1000;
 export class SlotItemComponent implements OnInit, OnChanges {
 
     @Input({required: true})
-    items: IconDefinition[] = [];
+    items: IconName[] = [];
 
     @Input({required: true})
-    targetIndex: number = 1;
+    target!: IconName;
 
     @Input()
     logging: boolean = false;
@@ -94,7 +95,7 @@ export class SlotItemComponent implements OnInit, OnChanges {
                         map(v => Math.round(v)),
                         concatMap(value => interval(value).pipe(take(1))),
                         takeWhile((v, i) =>
-                            i <= 8 || this.indexToShow !== this.targetIndex
+                            i <= 8 || this.items[this.indexToShow] !== this.target
                         )
                     )
                 )

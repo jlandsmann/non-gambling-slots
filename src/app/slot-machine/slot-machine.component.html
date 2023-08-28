@@ -5,7 +5,7 @@
     <ngsm-slot-item *ngFor="let slot of slots; let i = index"
                     class="block border h-full flex-grow"
                     [items]="items"
-                    [targetIndex]="currentConfiguration[i]"
+                    [target]="currentConfiguration[i]"
                     [start$]="start$" [stop$]="stop$"
     ></ngsm-slot-item>
   </div>
