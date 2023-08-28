@@ -75,6 +75,16 @@
           </select>
         </div>
       </label>
+
+      <label class="block">
+        <span class="block font-medium leading-6 text-gray-900">Finished rolling text</span>
+        <input type="text"
+               class="form-input rounded mt-1 block w-full"
+               [ngModel]="config.finishedText"
+               (ngModelChange)="updateConfig('finishedText', $event)"
+               placeholder="Leave empty to disable"
+        >
+      </label>
     </div>
   </section>
 

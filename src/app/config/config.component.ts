@@ -27,9 +27,7 @@ export class ConfigComponent {
 
   private readonly location: LocationStrategy = inject(LocationStrategy);
 
-  @HostListener('window:keydown.b')
-  @HostListener('window:keydown.s')
-  @HostListener('window:keydown.c')
+  @HostListener('window:keydown.enter')
   onBackKeyDown(): void {
     this.location.back();
   }

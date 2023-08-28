@@ -15,5 +15,4 @@ export const DEFAULT_CONFIG: SlotMachineConfig = {
     faAnchor, faRobot, faCrown, faRecordVinyl, faVirus,
   ].map(i => i.iconName),
   numberOfSlots: 3,
-  randomTargetConfiguration: true,
 };

@@ -1,9 +1,9 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
   concatMap,
   concatWith,
-  EMPTY,
+  EMPTY, finalize,
   interval,
   map,
   mergeWith,
@@ -75,6 +75,9 @@ export class SlotItemComponent implements OnInit, OnChanges {
     @Input({required: true})
     stop$: Observable<void> = EMPTY;
 
+    @Output()
+    readonly stop: EventEmitter<void> = new EventEmitter<void>();
+
     indexToShow$: Observable<number>;
     indexToShow: number = 0;
     initialized: boolean = false;
@@ -96,7 +99,8 @@ export class SlotItemComponent implements OnInit, OnChanges {
                         concatMap(value => interval(value).pipe(take(1))),
                         takeWhile((v, i) =>
                             i <= 8 || this.items[this.indexToShow] !== this.target
-                        )
+                        ),
+                        finalize(() => this.stop.next())
                     )
                 )
             )),

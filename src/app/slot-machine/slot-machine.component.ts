@@ -30,12 +30,13 @@ export class SlotMachineComponent {
   readonly slots: number[];
   readonly start$ = new Subject<void>();
   readonly stop$ = new Subject<void>();
-
-  private readonly config: SlotMachineConfig = inject(ConfigService).getConfig();
+  readonly config: SlotMachineConfig = inject(ConfigService).getConfig();
   private readonly router: Router = inject(Router);
 
   currentConfiguration: IconName[];
   started: boolean = false;
+  stoppedSlots: number = 0;
+  stopped: boolean = true;
 
   constructor() {
     this.name = this.config.name;
@@ -48,7 +49,7 @@ export class SlotMachineComponent {
   @HostListener('window:keydown.enter')
   onMainKeydown(): void {
     if (this.started) this.stop();
-    else this.next();
+    else if (this.stopped) this.next();
   }
 
   @HostListener('window:keydown.s')
@@ -57,14 +58,26 @@ export class SlotMachineComponent {
     this.router.navigate(['config']);
   }
 
+  onStopped(): void {
+    this.stoppedSlots++;
+    if (this.stoppedSlots === this.slots.length) {
+      this.stopped = true;
+      this.started = false;
+    }
+  }
+
   next(): void {
+    if (!this.stopped) return;
     this.started = true;
+    this.stoppedSlots = 0;
+    this.stopped = false;
     this.currentConfiguration = this.config.targetConfiguration ?? this.generateRandomConfiguration();
     this.start$.next();
   }
 
 
   stop(): void {
+    if (!this.started) return;
     this.stop$.next();
   }
 
