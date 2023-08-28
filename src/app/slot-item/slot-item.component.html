@@ -4,7 +4,7 @@
       <div class="absolute border-x top-1/4 h-1/2 flex items-center w-full justify-center"
            [@slot]="calcOffsetClass(i, (indexToShow$ | async)!)"
       >
-        <fa-icon size="5x" [icon]="['fas', item]"></fa-icon>
+        <fa-icon [icon]="['fas', item]"></fa-icon>
       </div>
     </ng-container>
     <div class="absolute z-50 top-0 left-0 right-0 h-1/6 bg-gradient-to-b from-black to-transparent"></div>
