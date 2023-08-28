@@ -1,16 +1,16 @@
 <div class="w-full h-full flex flex-col items-center justify-center">
-  <h1 *ngIf="name" class="text-4xl font-bold text-gray-900 mb-8">{{ name }}</h1>
+  <h1 *ngIf="name" class="text-4xl font-bold text-gray-900 my-8 hidden">{{ name }}</h1>
 
-  <div class="h-2/3 w-full max-w-7xl flex">
+  <div class="h-2/3 flex-grow w-full flex bg-gray-100 text-red-700">
     <ngsm-slot-item *ngFor="let slot of slots; let i = index"
-                    class="block border h-full flex-grow"
+                    class="block h-full flex-grow"
                     [items]="items"
                     [target]="currentConfiguration[i]"
                     [start$]="start$" [stop$]="stop$"
     ></ngsm-slot-item>
   </div>
 
-  <div class="w-full flex justify-center gap-4 mt-8">
+  <div class="w-full flex justify-center gap-4 mt-8 hidden">
     <button class="px-4 py-2 bg-teal-700 text-gray-100 hover:underline"
             (click)="next()"
     >Start</button>

@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, HostListener, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {SlotItemComponent} from "../slot-item/slot-item.component";
 import {Subject} from "rxjs";
@@ -13,6 +13,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {ConfigService} from "../config/services";
 import {IconName} from "@fortawesome/fontawesome-common-types";
+import {Router} from "@angular/router";
+import {SlotMachineConfig} from "../config/models";
 
 @Component({
   selector: 'ngsm-slot-machine',
@@ -29,9 +31,11 @@ export class SlotMachineComponent {
   readonly start$ = new Subject<void>();
   readonly stop$ = new Subject<void>();
 
-  private readonly config = inject(ConfigService).getConfig();
+  private readonly config: SlotMachineConfig = inject(ConfigService).getConfig();
+  private readonly router: Router = inject(Router);
 
   currentConfiguration: IconName[];
+  started: boolean = false;
 
   constructor() {
     this.name = this.config.name;
@@ -40,10 +44,25 @@ export class SlotMachineComponent {
     this.currentConfiguration = this.generateRandomConfiguration();
   }
 
+  @HostListener('window:keydown.space')
+  @HostListener('window:keydown.enter')
+  onMainKeydown(): void {
+    if (this.started) this.stop();
+    else this.next();
+  }
+
+  @HostListener('window:keydown.s')
+  @HostListener('window:keydown.c')
+  onSettingsKeyDown(): void {
+    this.router.navigate(['config']);
+  }
+
   next(): void {
+    this.started = true;
     this.currentConfiguration = this.config.targetConfiguration ?? this.generateRandomConfiguration();
     this.start$.next();
   }
+
 
   stop(): void {
     this.stop$.next();

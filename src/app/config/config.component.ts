@@ -1,5 +1,5 @@
-import {Component, inject, TrackByFunction} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {Component, HostListener, inject, TrackByFunction} from '@angular/core';
+import {CommonModule, LocationStrategy} from '@angular/common';
 import {FormsModule} from "@angular/forms";
 import {SlotMachineConfig} from "./models";
 import {ConfigService} from "./services";
@@ -8,6 +8,7 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {CdkListbox, CdkOption} from "@angular/cdk/listbox";
 import {SelectionListComponent} from "./selection-list/selection-list.component";
 import {IconName} from "@fortawesome/fontawesome-common-types";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'ngsm-config',
@@ -23,6 +24,15 @@ export class ConfigComponent {
   config: SlotMachineConfig = this.service.getConfig();
   configurationTemplate: IconName[] = this.generateConfiguration();
   trackByIndex: TrackByFunction<IconName> = (icon, idx) => idx;
+
+  private readonly location: LocationStrategy = inject(LocationStrategy);
+
+  @HostListener('window:keydown.b')
+  @HostListener('window:keydown.s')
+  @HostListener('window:keydown.c')
+  onBackKeyDown(): void {
+    this.location.back();
+  }
 
   updateNumberOfSlots(value: number): void {
     this.configurationTemplate = new Array(value).fill(this.items[0], 0, value);
