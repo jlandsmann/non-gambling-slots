@@ -2,13 +2,11 @@
   <span class="block font-medium leading-6 text-gray-900 order-1">{{ availableItemsLabel }}</span>
   <span class="block font-medium leading-6 text-gray-900 order-3 sm:order-2">{{ selectedItemsLabel }}</span>
   <select class="form-multiselect rounded block w-full order-2 sm:order-3" multiple (keydown)="addItemFromIndex(addSelect.selectedIndex)" #addSelect>
-    <ng-container *ngFor="let item of availableItems; trackBy: trackByFn">
-      <option *ngIf="!selectedItems.includes(item)"
-              [value]="item"
-              (dblclick)="addItem(item)"
-              (pointerup)="addItem(item)"
-      >{{ labelFn(item) }}</option>
-    </ng-container>
+    <option *ngFor="let item of availableItems; trackBy: trackByFn"
+            [value]="item"
+            (dblclick)="addItem(item)"
+            (pointerup)="addItem(item)"
+    >{{ labelFn(item) }}</option>
   </select>
   <select class="form-multiselect rounded block w-full order-4" multiple (keydown)="removeItemFromIndex(removeSelect.selectedIndex)" #removeSelect>
     <option *ngFor="let item of selectedItems; trackBy: trackByFn"

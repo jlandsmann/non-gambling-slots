@@ -1,17 +1,22 @@
-<div class="w-full h-full flex flex-col items-center justify-center">
+<div class="w-full h-full flex flex-col items-center justify-center" [ngClass]="[config.theme.backgroundClass]">
   <h1 *ngIf="name" class="text-4xl font-bold text-gray-900 my-8 hidden">{{ name }}</h1>
 
-  <div class="relative h-2/3 flex-grow w-full flex bg-gray-100 text-red-700">
+  <div class="relative h-full w-full gap-24 p-24 flex">
     <ngsm-slot-item *ngFor="let slot of slots; let i = index"
-                    class="block h-full flex-grow"
+                    class="block flex-grow z-20"
+                    [ngClass]="[config.theme.iconColorClass]"
                     [items]="items"
                     [target]="currentConfiguration[i]"
                     [start$]="start$" [stop$]="stop$"
                     (stop)="onStopped()"
     ></ngsm-slot-item>
 
-    <div class="absolute flex justify-center items-center inset-0 transition-all delay-700" *ngIf="config.finishedText" [class.opacity-0]="stoppedSlots < slots.length">
-      <h1 class="text-8xl font-bold text-gray-900 bg-green-500 rounded  py-8 px-16 w-1/2 text-center shadow-2xl">{{ config.finishedText }}</h1>
+    <img class="absolute inset-24 z-10" src="assets/trio.svg" alt="">
+    <img class="absolute inset-24 z-30" src="assets/trio_gradient.svg" alt="">
+
+    <div class="absolute flex top-48 z-50 h-48 items-center justify-center inset-0 transition-all delay-1000" *ngIf="config.finishedText" [class.opacity-0]="stoppedSlots < slots.length">
+      <h1 class="text-8xl font-bold rounded drop-shadow-2xl py-8 px-16 w-1/2 text-center"
+          [ngClass]="[config.theme.finishedTextColorClass, config.theme.finishedBackgroundClass]">{{ config.finishedText }}</h1>
     </div>
   </div>
 

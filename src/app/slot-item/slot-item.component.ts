@@ -37,20 +37,20 @@ const stepTime: number = 1000;
                 opacity: 0
             })),
             state('previous', style({
-                transform: 'translateY(100%)'
+                transform: 'translateY(100%) rotateX(45deg)'
             })),
             state('current', style({
-                transform: 'translateY(0%)'
+                transform: 'translateY(0%) rotateX(0deg)'
             })),
             state('next', style({
-                transform: 'translateY(-100%)'
+                transform: 'translateY(-100%) rotateX(-45deg)'
             })),
             transition('hidden => next', [
-                style({transform: 'translateY(-200%)', opacity: 1}),
+                style({transform: 'translateY(-200%) rotateX(-90deg)', opacity: 1}),
                 animate(stepTime)
             ]),
             transition('previous => hidden', [
-                animate(stepTime, style({transform: 'translateY(200%)', opacity: 1})),
+                animate(stepTime, style({transform: 'translateY(200%) rotateX(90deg)', opacity: 1})),
             ]),
             transition('* => *', [
                 animate(stepTime)

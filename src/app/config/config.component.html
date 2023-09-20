@@ -37,6 +37,7 @@
                            selectedItemsLabel="Items to display"
                            [availableItems]="items"
                            [selectedItems]="config.availableItems"
+                           [trackByFn]="trackByValue"
                            (selectedItemsChange)="updateConfig('availableItems', $event)"
       ></ngsm-selection-list>
     </div>

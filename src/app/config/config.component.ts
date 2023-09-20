@@ -19,11 +19,12 @@ import {Router} from "@angular/router";
 })
 export class ConfigComponent {
 
-  readonly items: IconName[] = Object.values(fas).map(i => i.iconName);
+  readonly items: IconName[] = Array.from(new Set(Object.values(fas).map(i => i.iconName))).sort();
   readonly service: ConfigService = inject(ConfigService);
   config: SlotMachineConfig = this.service.getConfig();
   configurationTemplate: IconName[] = this.generateConfiguration();
-  trackByIndex: TrackByFunction<IconName> = (icon, idx) => idx;
+  readonly trackByIndex: TrackByFunction<IconName> = (icon, idx) => idx;
+  readonly trackByValue: TrackByFunction<IconName> = (value, idx) => value;
 
   private readonly location: LocationStrategy = inject(LocationStrategy);
 

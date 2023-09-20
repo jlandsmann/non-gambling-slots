@@ -8,6 +8,7 @@ import {
   faRocket, faVirus,
   faWandMagicSparkles
 } from "@fortawesome/free-solid-svg-icons";
+import {BasicGreenTheme} from "./themes/basic-green.theme";
 
 export const DEFAULT_CONFIG: SlotMachineConfig = {
   availableItems: [
@@ -15,4 +16,5 @@ export const DEFAULT_CONFIG: SlotMachineConfig = {
     faAnchor, faRobot, faCrown, faRecordVinyl, faVirus,
   ].map(i => i.iconName),
   numberOfSlots: 3,
+  theme: BasicGreenTheme
 };

@@ -31,6 +31,9 @@ export class SelectionListComponent<T> {
   selectedItems: T[] = [];
 
   @Output()
+  readonly availableItemsChange = new EventEmitter<T[]>();
+
+  @Output()
   readonly selectedItemsChange = new EventEmitter<T[]>();
 
   @Input()
@@ -38,15 +41,15 @@ export class SelectionListComponent<T> {
 
   addItem(item?: T) {
     if (!item || this.selectedItems.includes(item)) return;
-    this.selectedItems.push(item);
+    this.moveItem(item, this.availableItems, this.selectedItems);
+    this.availableItemsChange.emit(this.availableItems);
     this.selectedItemsChange.emit(this.selectedItems);
   }
 
   removeItem(item?: T) {
     if (!item) return;
-    const idx = this.selectedItems.indexOf(item);
-    if (idx <= 0) return;
-    this.selectedItems.splice(idx, 1);
+    this.moveItem(item, this.selectedItems, this.availableItems);
+    this.availableItemsChange.emit(this.availableItems);
     this.selectedItemsChange.emit(this.selectedItems);
   }
 
@@ -58,5 +61,12 @@ export class SelectionListComponent<T> {
   removeItemFromIndex(idx: number) {
     const item = this.selectedItems[idx];
     this.removeItem(item);
+  }
+
+  private moveItem(item: T, src: T[], dest: T[]): void {
+    const idx = src.indexOf(item);
+    if (idx < 0) return;
+    src.splice(idx, 1);
+    dest.push(item);
   }
 }
