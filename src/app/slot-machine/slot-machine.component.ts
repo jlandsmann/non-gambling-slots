@@ -1,5 +1,5 @@
 import {Component, HostListener, inject} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {SlotItemComponent} from "../slot-item/slot-item.component";
 import {Subject} from "rxjs";
 import {
@@ -19,7 +19,7 @@ import {SlotMachineConfig} from "../config/models";
 @Component({
   selector: 'ngsm-slot-machine',
   standalone: true,
-  imports: [CommonModule, SlotItemComponent],
+  imports: [CommonModule, SlotItemComponent, NgOptimizedImage],
   templateUrl: './slot-machine.component.html',
   styleUrls: ['./slot-machine.component.scss']
 })

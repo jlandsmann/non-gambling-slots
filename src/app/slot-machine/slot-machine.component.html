@@ -1,21 +1,24 @@
 <div class="w-full h-full flex flex-col items-center justify-center" [ngClass]="[config.theme.backgroundClass]">
   <h1 *ngIf="name" class="text-4xl font-bold text-gray-900 my-8 hidden">{{ name }}</h1>
 
-  <div class="relative h-full w-full gap-24 p-24 flex">
-    <ngsm-slot-item *ngFor="let slot of slots; let i = index"
-                    class="block flex-grow z-20"
-                    [ngClass]="[config.theme.iconColorClass]"
-                    [items]="items"
-                    [target]="currentConfiguration[i]"
-                    [start$]="start$" [stop$]="stop$"
-                    (stop)="onStopped()"
-    ></ngsm-slot-item>
+  <div class="h-full p-24 w-full">
+    <div class="relative aspect-video w-full max-h-full flex justify-around overflow-hidden">
+      <ng-container *ngFor="let slot of slots; let i = index; let last = last">
+        <ngsm-slot-item class="block slot-item z-20"
+                        [ngClass]="[config.theme.iconColorClass]"
+                        [items]="items"
+                        [target]="currentConfiguration[i]"
+                        [start$]="start$" [stop$]="stop$"
+                        (stop)="onStopped()"
+        ></ngsm-slot-item>
+        <span class="slot-spacer" *ngIf="!last"></span>
+      </ng-container>
 
-    <img class="absolute inset-24 z-10" src="assets/trio.svg" alt="">
-    <img class="absolute inset-24 z-30" src="assets/trio_gradient.svg" alt="">
+      <img class="absolute z-10 object-cover" fill="" ngSrc="assets/trio.svg" alt="" />
+      <img class="absolute z-30 object-cover" fill="" ngSrc="assets/trio_gradient.svg" alt="" />
 
-    <div class="absolute flex top-48 z-50 h-48 items-center justify-center inset-0 transition-all delay-1000" *ngIf="config.finishedText" [class.opacity-0]="stoppedSlots < slots.length">
-      <h1 class="text-8xl font-bold rounded drop-shadow-2xl py-8 px-16 w-1/2 text-center"
+    <div class="absolute flex top-24 z-50 h-48 items-center justify-center inset-0 transition-all delay-1000" *ngIf="config.finishedText" [class.opacity-0]="stoppedSlots < slots.length">
+      <h1 class="text-8xl font-bold rounded drop-shadow-2xl py-8 px-16 text-center"
           [ngClass]="[config.theme.finishedTextColorClass, config.theme.finishedBackgroundClass]">{{ config.finishedText }}</h1>
     </div>
   </div>
