@@ -1,10 +1,10 @@
 <ng-container *ngIf="(indexToShow$ | async) !== null">
   <div class="relative h-full overflow-hidden" [@.disabled]="!initialized">
-    <ng-container *ngFor="let item of items; let i = index">
+    <ng-container *ngFor="let icon of iconsToShow; let i = index">
       <div class="absolute top-1/4 h-1/2 flex items-center w-full justify-center"
            [@slot]="calcOffsetClass(i, (indexToShow$ | async)!)"
       >
-        <fa-icon [icon]="['fas', item]"></fa-icon>
+        <fa-icon [icon]="icon"></fa-icon>
       </div>
     </ng-container>
   </div>

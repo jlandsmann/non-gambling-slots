@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
   concatMap,
@@ -19,16 +19,17 @@ import {
   tap
 } from "rxjs";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {IconDefinition} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {FaIconLibrary, FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {IconName} from "@fortawesome/fontawesome-common-types";
+import {fas, IconDefinition} from "@fortawesome/free-solid-svg-icons";
+import {fab} from "@fortawesome/free-brands-svg-icons";
 
 const stepTime: number = 1000;
 
 @Component({
     selector: 'ngsm-slot-item',
     standalone: true,
-  imports: [CommonModule, FontAwesomeModule],
+    imports: [CommonModule, FontAwesomeModule],
     templateUrl: './slot-item.component.html',
     styleUrls: ['./slot-item.component.scss'],
     animations: [
@@ -82,9 +83,11 @@ export class SlotItemComponent implements OnInit, OnChanges {
     indexToShow: number = 0;
     initialized: boolean = false;
     startIndex: number = 0;
+    iconsToShow: IconDefinition[] = [];
 
     private readonly doStart$ = new Subject<void>();
     private readonly startIndex$ = new ReplaySubject<number>(1);
+    private readonly iconLibrary = inject(FaIconLibrary);
     private startSubscription?: Subscription;
 
     constructor() {
@@ -94,7 +97,7 @@ export class SlotItemComponent implements OnInit, OnChanges {
                 takeUntil(this.stop$),
                 concatWith(
                     interval(100).pipe(
-                        map((value, index) => 250 + (350 / (1 + Math.exp(-0.002 * 350 * index) * 400))),
+                        map((value, index) => 400 + (350 / (1 + Math.exp(-0.002 * 350 * index) * 400))),
                         map(v => Math.round(v)),
                         concatMap(value => interval(value).pipe(take(1))),
                         takeWhile((v, i) =>
@@ -121,6 +124,14 @@ export class SlotItemComponent implements OnInit, OnChanges {
       if ('start$' in changes) {
         this.startSubscription?.unsubscribe();
         this.startSubscription = this.start$.subscribe(() => this.doStart$.next());
+      }
+
+      if ('items' in changes) {
+        const iconNames = changes['items'].currentValue as IconName[];
+        this.iconsToShow = iconNames.map(iconName =>
+          this.iconLibrary.getIconDefinition('fas', iconName) ??
+          this.iconLibrary.getIconDefinition('fab', iconName)
+        ).filter((icon): icon is IconDefinition => !!icon);
       }
     }
 

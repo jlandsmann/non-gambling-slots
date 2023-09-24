@@ -4,6 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import {SlotMachineComponent} from "./slot-machine/slot-machine.component";
 import {FaIconLibrary, FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {fas} from "@fortawesome/free-solid-svg-icons";
+import {fab} from "@fortawesome/free-brands-svg-icons";
 
 @Component({
   selector: 'ngsm-root',
@@ -13,6 +14,6 @@ import {fas} from "@fortawesome/free-solid-svg-icons";
 })
 export class AppComponent {
   constructor(library: FaIconLibrary) {
-    library.addIconPacks(fas);
+    library.addIconPacks(fas, fab);
   }
 }

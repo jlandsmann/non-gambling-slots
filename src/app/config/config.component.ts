@@ -9,6 +9,7 @@ import {CdkListbox, CdkOption} from "@angular/cdk/listbox";
 import {SelectionListComponent} from "./selection-list/selection-list.component";
 import {IconName} from "@fortawesome/fontawesome-common-types";
 import {Router} from "@angular/router";
+import {fab} from "@fortawesome/free-brands-svg-icons";
 
 @Component({
   selector: 'ngsm-config',
@@ -19,7 +20,10 @@ import {Router} from "@angular/router";
 })
 export class ConfigComponent {
 
-  readonly items: IconName[] = Array.from(new Set(Object.values(fas).map(i => i.iconName))).sort();
+  readonly items: IconName[] = Array.from(new Set([
+    ...Object.values(fas).map(i => i.iconName),
+    ...Object.values(fab).map(i => i.iconName),
+  ])).sort();
   readonly service: ConfigService = inject(ConfigService);
   config: SlotMachineConfig = this.service.getConfig();
   configurationTemplate: IconName[] = this.generateConfiguration();
